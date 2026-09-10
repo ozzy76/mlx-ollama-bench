@@ -1,0 +1,31 @@
+{
+  "paths": {
+    "results_dir": "results",
+    "test_ollama_models": "ollama-test-models"
+  },
+  "ollama": {
+    "production_host": "http://127.0.0.1:11434",
+    "test_port": 11435
+  },
+  "model": {
+    "ollama_tag": "gemma4:12b",
+    "ollama_mlx_tag": "gemma4:12b-mlx",
+    "hf_repo": "mlx-community/gemma-4-12B-it-4bit"
+  },
+  "prompts": {
+    "short_words": 375,
+    "medium_words": 3000,
+    "long_words": 12000,
+    "short_tokens": 500,
+    "medium_tokens": 4000,
+    "long_tokens": 16000,
+    "max_new_tokens": 256
+  },
+  "run": {
+    "reps_per_cell": 5,
+    "include_mlx_raw": false,
+    "include_mlx_raw_note": "Set true once mlx-lm ships gemma4_unified support (ml-explore/mlx-lm#1481) or once model.hf_repo points at an architecture mlx-lm already supports. False = A vs B only (Ollama GGUF vs Ollama MLX backend), both confirmed working on gemma4:12b in the dry run.",
+    "num_ctx": 24576,
+    "num_ctx_note": "Sent as options.num_ctx on every Ollama request so the GGUF backend can't silently truncate a long prompt to a smaller default context window (this is what invalidated the 'long' bucket in the first full run). 24576 covers the default long bucket's measured ~13.2K prompt tokens plus max_new_tokens with headroom. If you raise prompts.long_words/long_tokens, or point this at a model with a much longer prompt, raise this too -- or delete this key entirely and run_matrix.py will derive one automatically from the largest configured bucket (see resolve_num_ctx() in run_matrix.py)."
+  }
+}
